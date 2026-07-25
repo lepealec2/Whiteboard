@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Whiteboard Simulator</title>
+  <title>Simple Whiteboard</title>
 
   <style>
     body {
@@ -31,7 +31,7 @@
       width: 90%;
       margin: 10px auto;
       display: block;
-      font-size: 36px;
+      font-size: 100px;
       padding: 5px;
       text-align: center;
     }
@@ -103,15 +103,12 @@
   <button onclick="changeSize(10)">+10</button>
   px
 
-
   <br>
-
 
   <button onclick="resetFormats()">Reset Formats</button>
   <button onclick="toggleCenter()">Center</button>
   <button id="drawButton" onclick="toggleDraw()">Enable Drawing</button>
   <button onclick="toggleBox()">Hide/Show</button>
-
 
 </div>
 
@@ -140,14 +137,14 @@
 
 
 let box = document.getElementById("boardBox");
+let nameBox = document.getElementById("nameBox");
 
 let visible = true;
-
 let centered = false;
 
 
 // --------------------
-// TEXT CONTROLS
+// TEXT SETTINGS
 // --------------------
 
 
@@ -163,13 +160,16 @@ document.getElementById("boxColor").addEventListener("input", function() {
 });
 
 
-// Font size
+// Font size input
 document.getElementById("fontSize").addEventListener("input", function() {
+
   box.style.fontSize = this.value + "px";
+  nameBox.style.fontSize = this.value + "px";
+
 });
 
 
-// Increase/decrease size
+// Change text size
 function changeSize(amount) {
 
   let input = document.getElementById("fontSize");
@@ -181,6 +181,7 @@ function changeSize(amount) {
     size = 5;
   }
 
+
   if (size > 200) {
     size = 200;
   }
@@ -189,8 +190,10 @@ function changeSize(amount) {
   input.value = size;
 
   box.style.fontSize = size + "px";
+  nameBox.style.fontSize = size + "px";
 
 }
+
 
 
 // Center text
@@ -203,6 +206,7 @@ function toggleCenter() {
 }
 
 
+
 // Clear text only
 function clearText() {
 
@@ -211,23 +215,21 @@ function clearText() {
 }
 
 
+
 // Reset formats
 function resetFormats() {
 
   document.getElementById("textColor").value = "#000000";
-
   document.getElementById("boxColor").value = "#ffffff";
-
   document.getElementById("fontSize").value = 100;
 
 
   box.style.color = "#000000";
-
   box.style.background = "#ffffff";
-
   box.style.fontSize = "100px";
-
   box.style.textAlign = "left";
+
+  nameBox.style.fontSize = "100px";
 
 
   centered = false;
@@ -235,7 +237,8 @@ function resetFormats() {
 }
 
 
-// Hide/show whiteboard
+
+// Hide/show board
 function toggleBox() {
 
   visible = !visible;
@@ -270,7 +273,6 @@ function resizeCanvas() {
 
 
   oldCanvas.width = canvas.width;
-
   oldCanvas.height = canvas.height;
 
 
@@ -278,7 +280,6 @@ function resizeCanvas() {
 
 
   canvas.width = box.clientWidth;
-
   canvas.height = box.clientHeight;
 
 
@@ -298,7 +299,6 @@ window.addEventListener("resize", resizeCanvas);
 function toggleDraw() {
 
   drawMode = !drawMode;
-
 
   let button = document.getElementById("drawButton");
 
@@ -379,7 +379,7 @@ canvas.addEventListener("mouseleave", function() {
 
 
 
-// Clear drawings only
+// Clear drawing only
 function clearDraw() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
