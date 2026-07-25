@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Whiteboard Simulator</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #f5f5f5;
+    }
+
+    #pageTitle {
+      text-align: center;
+      font-size: 36px;
+    }
+
+    #toolbar {
+      padding: 10px;
+      background: white;
+      border-bottom: 1px solid #ccc;
+      font-size: 36px;
+    }
+
+    input, button {
+      margin: 3px;
+      font-size: 36px;
+    }
+
+    #nameBox {
+      width: 90%;
+      margin: 10px auto;
+      display: block;
+      font-size: 36px;
+      padding: 5px;
+      text-align: center;
+    }
+
+    #nameBox::placeholder {
+      text-align: center;
+    }
+
+    #boardBox {
+      width: 90%;
+      height: 70vh;
+      margin: 20px auto 5px auto;
+      padding: 10px;
+      border: 2px solid #333;
+      outline: none;
+      overflow: auto;
+      background: #ffffff;
+      color: #000000;
+      font-size: 100px;
+      text-align: left;
+    }
+
+    #bottomControls {
+    width: 90%;
+    margin: 10px auto;
+    text-align: right;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<h1 id="pageTitle">Simple Whiteboard</h1>
+
+
+<input id="nameBox" placeholder="Name">
+
+
+<div id="toolbar">
+
+  Text Color:
+  <input type="color" id="textColor" value="#000000">
+
+  Box Color:
+  <input type="color" id="boxColor" value="#ffffff">
+
+  Text Size:
+  <button onclick="changeSize(-10)">-10</button>
+  <input type="number" id="fontSize" value="100" min="5" max="200">
+  <button onclick="changeSize(10)">+10</button>
+  px
+
+  <br>
+
+  <button onclick="resetFormats()">Reset Formats</button>
+  <button onclick="toggleCenter()">Center</button>
+  <button onclick="toggleBox()">Hide/Show</button>
+
+</div>
+
+
+<div id="boardBox" contenteditable="true"></div>
+
+
+<div id="bottomControls">
+  <button onclick="clearText()">Clear Text</button>
+</div>
+
+
+<script>
+
+let box = document.getElementById("boardBox");
+let visible = true;
+let centered = false;
+
+
+// Live text color
+document.getElementById("textColor").addEventListener("input", function() {
+  box.style.color = this.value;
+});
+
+
+// Live box color
+document.getElementById("boxColor").addEventListener("input", function() {
+  box.style.background = this.value;
+});
+
+
+// Live font size
+document.getElementById("fontSize").addEventListener("input", function() {
+  box.style.fontSize = this.value + "px";
+});
+
+
+// Increase/decrease size
+function changeSize(amount) {
+
+  let sizeInput = document.getElementById("fontSize");
+
+  let newSize = parseInt(sizeInput.value) + amount;
+
+  if (newSize < 5) {
+    newSize = 5;
+  }
+
+  if (newSize > 200) {
+    newSize = 200;
+  }
+
+  sizeInput.value = newSize;
+  box.style.fontSize = newSize + "px";
+}
+
+
+// Center text toggle
+function toggleCenter() {
+
+  centered = !centered;
+
+  box.style.textAlign = centered ? "center" : "left";
+}
+
+
+// Clear only text
+function clearText() {
+
+  box.innerHTML = "";
+
+}
+
+
+// Reset formatting
+function resetFormats() {
+
+  document.getElementById("textColor").value = "#000000";
+  document.getElementById("boxColor").value = "#ffffff";
+  document.getElementById("fontSize").value = 100;
+
+  box.style.color = "#000000";
+  box.style.background = "#ffffff";
+  box.style.fontSize = "100px";
+  box.style.textAlign = "left";
+
+  centered = false;
+
+}
+
+
+// Hide/show whiteboard
+function toggleBox() {
+
+  visible = !visible;
+
+  box.style.display = visible ? "block" : "none";
+
+}
+
+</script>
+
+</body>
+</html>
