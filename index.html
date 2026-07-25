@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Whiteboard Simulator</title>
+  <title>Simple Whiteboard</title>
 
   <style>
     body {
@@ -33,6 +33,11 @@
       display: block;
       font-size: 36px;
       padding: 5px;
+      text-align: center;
+    }
+
+    #nameBox::placeholder {
+      text-align: center;
     }
 
     #boardBox {
@@ -74,11 +79,14 @@
   <input type="color" id="boxColor" value="#ffffff">
 
   Text Size:
-  <input type="number" id="fontSize" value="100" min="5" max="200"> px
+  <button onclick="changeSize(-10)">-10</button>
+  <input type="number" id="fontSize" value="100" min="5" max="200">
+  <button onclick="changeSize(10)">+10</button>
+  px
 
   <br>
 
-  <button onclick="resetDefaults()">Reset</button>
+  <button onclick="resetFormats()">Reset Formats</button>
   <button onclick="toggleCenter()">Center</button>
   <button onclick="toggleBox()">Hide/Show</button>
 
@@ -89,7 +97,7 @@
 
 
 <div id="bottomControls">
-  <button onclick="clearBoard()">Clear</button>
+  <button onclick="clearText()">Clear Text</button>
 </div>
 
 
@@ -112,27 +120,51 @@ document.getElementById("boxColor").addEventListener("input", function() {
 });
 
 
-// Live text size
+// Live font size
 document.getElementById("fontSize").addEventListener("input", function() {
   box.style.fontSize = this.value + "px";
 });
 
 
-// Center toggle
+// Increase/decrease size
+function changeSize(amount) {
+
+  let sizeInput = document.getElementById("fontSize");
+
+  let newSize = parseInt(sizeInput.value) + amount;
+
+  if (newSize < 5) {
+    newSize = 5;
+  }
+
+  if (newSize > 200) {
+    newSize = 200;
+  }
+
+  sizeInput.value = newSize;
+  box.style.fontSize = newSize + "px";
+}
+
+
+// Center text toggle
 function toggleCenter() {
+
   centered = !centered;
+
   box.style.textAlign = centered ? "center" : "left";
 }
 
 
-// Clear board
-function clearBoard() {
+// Clear only text
+function clearText() {
+
   box.innerHTML = "";
+
 }
 
 
-// Reset defaults
-function resetDefaults() {
+// Reset formatting
+function resetFormats() {
 
   document.getElementById("textColor").value = "#000000";
   document.getElementById("boxColor").value = "#ffffff";
@@ -144,13 +176,17 @@ function resetDefaults() {
   box.style.textAlign = "left";
 
   centered = false;
+
 }
 
 
-// Hide/show
+// Hide/show whiteboard
 function toggleBox() {
+
   visible = !visible;
+
   box.style.display = visible ? "block" : "none";
+
 }
 
 </script>
