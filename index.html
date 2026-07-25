@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple Whiteboard</title>
+  <title>Whiteboard Simulator</title>
 
   <style>
     body {
@@ -22,22 +22,36 @@
       font-size: 36px;
     }
 
-    button, input {
+    input, button {
       margin: 3px;
       font-size: 36px;
+    }
+
+    #nameBox {
+      width: 90%;
+      margin: 10px auto;
+      display: block;
+      font-size: 36px;
+      padding: 5px;
     }
 
     #boardBox {
       width: 90%;
       height: 70vh;
-      margin: 20px auto;
+      margin: 20px auto 5px auto;
       padding: 10px;
       border: 2px solid #333;
       outline: none;
       overflow: auto;
       background: #ffffff;
       color: #000000;
-      font-size: 36px;
+      font-size: 100px;
+      text-align: left;
+    }
+
+    #bottomControls {
+      text-align: center;
+      margin-top: 10px;
     }
   </style>
 
@@ -46,6 +60,9 @@
 <body>
 
 <h1 id="pageTitle">Simple Whiteboard</h1>
+
+
+<input id="nameBox" placeholder="Name">
 
 
 <div id="toolbar">
@@ -57,79 +74,80 @@
   <input type="color" id="boxColor" value="#ffffff">
 
   Text Size:
-  <input type="number" id="fontSize" value="36" min="5" max="200"> px
+  <input type="number" id="fontSize" value="100" min="5" max="200"> px
 
   <br>
 
-  <button onclick="undoText()">Undo</button>
   <button onclick="resetDefaults()">Reset</button>
+  <button onclick="toggleCenter()">Center</button>
   <button onclick="toggleBox()">Hide/Show</button>
 
 </div>
 
 
-<div id="boardBox" contenteditable="true">
-Type here...
+<div id="boardBox" contenteditable="true"></div>
+
+
+<div id="bottomControls">
+  <button onclick="clearBoard()">Clear</button>
 </div>
 
 
 <script>
 
 let box = document.getElementById("boardBox");
-let history = [];
 let visible = true;
+let centered = false;
 
 
-// Save text changes
-box.addEventListener("input", function() {
-  history.push(box.innerHTML);
-
-  if (history.length > 50) {
-    history.shift();
-  }
-});
-
-
-// Undo last text change
-function undoText() {
-  if (history.length > 0) {
-    box.innerHTML = history.pop();
-  }
-}
-
-
-// Change text color immediately
+// Live text color
 document.getElementById("textColor").addEventListener("input", function() {
   box.style.color = this.value;
 });
 
 
-// Change box color immediately
+// Live box color
 document.getElementById("boxColor").addEventListener("input", function() {
   box.style.background = this.value;
 });
 
 
-// Change text size immediately
+// Live text size
 document.getElementById("fontSize").addEventListener("input", function() {
   box.style.fontSize = this.value + "px";
 });
 
 
-// Reset all settings
+// Center toggle
+function toggleCenter() {
+  centered = !centered;
+  box.style.textAlign = centered ? "center" : "left";
+}
+
+
+// Clear board
+function clearBoard() {
+  box.innerHTML = "";
+}
+
+
+// Reset defaults
 function resetDefaults() {
 
   document.getElementById("textColor").value = "#000000";
   document.getElementById("boxColor").value = "#ffffff";
-  document.getElementById("fontSize").value = 36;
+  document.getElementById("fontSize").value = 100;
 
   box.style.color = "#000000";
   box.style.background = "#ffffff";
-  box.style.fontSize = "36px";
+  box.style.fontSize = "100px";
+  box.style.textAlign = "left";
+
+  centered = false;
 }
 
 
-// Hide/show whiteboard
+// Hide/show
 function toggleBox() {
   visible = !visible;
   box.style.display = visible ? "block" : "none";
