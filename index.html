@@ -5,127 +5,126 @@
   <style>
     body {
       margin: 0;
-      overflow: hidden;
       font-family: Arial;
-    }
-
-    #board {
-      width: 100vw;
-      height: 100vh;
       background: #f5f5f5;
-      position: relative;
-      cursor: crosshair;
-    }
-
-    .note {
-      position: absolute;
-      min-width: 80px;
-      min-height: 30px;
-      padding: 5px;
-      border: 1px solid #333;
-      background: white;
-      cursor: move;
-      user-select: none;
-    }
-
-    .selected {
-      border: 2px solid blue;
     }
 
     #toolbar {
-      position: fixed;
-      top: 10px;
-      left: 10px;
+      padding: 10px;
       background: white;
-      border: 1px solid #ccc;
-      padding: 8px;
-      z-index: 1000;
+      border-bottom: 1px solid #ccc;
+    }
+
+    #boardBox {
+      width: 90%;
+      height: 70vh;
+      margin: 20px auto;
+      padding: 10px;
+      border: 2px solid #333;
+      outline: none;
+      overflow: auto;
+      background: white;
+      color: black;
+      font-size: 18px;
+    }
+
+    button, input {
+      margin: 3px;
     }
   </style>
 </head>
+
 <body>
 
 <div id="toolbar">
-  <button onclick="deleteNote()">Delete Selected</button>
+
+  Text Color:
+  <input type="color" id="textColor" value="#000000">
+
+  Box Color:
+  <input type="color" id="boxColor" value="#ffffff">
+
+  Text Size:
+  <input type="number" id="fontSize" value="18" min="5" max="100"> px
+
+  <br>
+
+  <button onclick="undoText()">Undo</button>
+  <button onclick="resetDefaults()">Reset Colors</button>
+  <button onclick="toggleBox()">Hide/Show</button>
+
 </div>
 
-<div id="board"></div>
+
+<div id="boardBox" contenteditable="true">
+Type here...
+</div>
+
 
 <script>
-let board = document.getElementById("board");
-let selected = null;
 
-// Create note on click
-board.addEventListener("click", function(e) {
-  if (e.target !== board) return;
+let box = document.getElementById("boardBox");
+let history = [];
+let visible = true;
 
-  let note = document.createElement("div");
-  note.className = "note";
-  note.contentEditable = false;
-  note.innerText = "New Note";
 
-  note.style.left = e.clientX + "px";
-  note.style.top = e.clientY + "px";
+// Save text changes for undo
+box.addEventListener("input", function() {
+  history.push(box.innerHTML);
 
-  addNoteEvents(note);
-  board.appendChild(note);
+  // Keep last 50 changes
+  if (history.length > 50) {
+    history.shift();
+  }
 });
 
-// Add interactions
-function addNoteEvents(note) {
-  let offsetX, offsetY, dragging = false;
 
-  note.addEventListener("mousedown", function(e) {
-    selected = note;
-    setSelected(note);
-
-    dragging = true;
-    offsetX = e.offsetX;
-    offsetY = e.offsetY;
-  });
-
-  document.addEventListener("mousemove", function(e) {
-    if (!dragging) return;
-    note.style.left = (e.clientX - offsetX) + "px";
-    note.style.top = (e.clientY - offsetY) + "px";
-  });
-
-  document.addEventListener("mouseup", function() {
-    dragging = false;
-  });
-
-  // Double click to edit
-  note.addEventListener("dblclick", function() {
-    note.contentEditable = true;
-    note.focus();
-  });
-
-  // Stop editing on blur
-  note.addEventListener("blur", function() {
-    note.contentEditable = false;
-  });
-
-  // Select on click
-  note.addEventListener("click", function(e) {
-    e.stopPropagation();
-    selected = note;
-    setSelected(note);
-  });
-}
-
-// Highlight selected
-function setSelected(note) {
-  document.querySelectorAll(".note").forEach(n => n.classList.remove("selected"));
-  note.classList.add("selected");
-}
-
-// Delete selected
-function deleteNote() {
-  if (selected) {
-    selected.remove();
-    selected = null;
+// Undo
+function undoText() {
+  if (history.length > 0) {
+    box.innerHTML = history.pop();
   }
 }
+
+
+// Change text color immediately
+document.getElementById("textColor").addEventListener("input", function() {
+  box.style.color = this.value;
+});
+
+
+// Change box color immediately
+document.getElementById("boxColor").addEventListener("input", function() {
+  box.style.background = this.value;
+});
+
+
+// Change font size immediately
+document.getElementById("fontSize").addEventListener("input", function() {
+  box.style.fontSize = this.value + "px";
+});
+
+
+// Reset to default settings
+function resetDefaults() {
+
+  document.getElementById("textColor").value = "#000000";
+  document.getElementById("boxColor").value = "#ffffff";
+  document.getElementById("fontSize").value = 18;
+
+  box.style.color = "#000000";
+  box.style.background = "#ffffff";
+  box.style.fontSize = "18px";
+}
+
+
+// Hide/show box
+function toggleBox() {
+  visible = !visible;
+
+  box.style.display = visible ? "block" : "none";
+}
+
 </script>
 
 </body>
