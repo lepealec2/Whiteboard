@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Simple Whiteboard</title>
+
   <style>
     body {
       margin: 0;
@@ -23,9 +24,9 @@
       border: 2px solid #333;
       outline: none;
       overflow: auto;
-      background: white;
-      color: black;
-      font-size: 18px;
+      background: #ffffff;
+      color: #000000;
+      font-size: 36px;
     }
 
     button, input {
@@ -45,12 +46,12 @@
   <input type="color" id="boxColor" value="#ffffff">
 
   Text Size:
-  <input type="number" id="fontSize" value="18" min="5" max="100"> px
+  <input type="number" id="fontSize" value="36" min="5" max="200"> px
 
   <br>
 
   <button onclick="undoText()">Undo</button>
-  <button onclick="resetDefaults()">Reset Colors</button>
+  <button onclick="resetDefaults()">Reset</button>
   <button onclick="toggleBox()">Hide/Show</button>
 
 </div>
@@ -68,18 +69,17 @@ let history = [];
 let visible = true;
 
 
-// Save text changes for undo
+// Save text changes
 box.addEventListener("input", function() {
   history.push(box.innerHTML);
 
-  // Keep last 50 changes
   if (history.length > 50) {
     history.shift();
   }
 });
 
 
-// Undo
+// Undo last text change
 function undoText() {
   if (history.length > 0) {
     box.innerHTML = history.pop();
@@ -99,29 +99,28 @@ document.getElementById("boxColor").addEventListener("input", function() {
 });
 
 
-// Change font size immediately
+// Change text size immediately
 document.getElementById("fontSize").addEventListener("input", function() {
   box.style.fontSize = this.value + "px";
 });
 
 
-// Reset to default settings
+// Reset all settings
 function resetDefaults() {
 
   document.getElementById("textColor").value = "#000000";
   document.getElementById("boxColor").value = "#ffffff";
-  document.getElementById("fontSize").value = 18;
+  document.getElementById("fontSize").value = 36;
 
   box.style.color = "#000000";
   box.style.background = "#ffffff";
-  box.style.fontSize = "18px";
+  box.style.fontSize = "36px";
 }
 
 
-// Hide/show box
+// Hide/show whiteboard
 function toggleBox() {
   visible = !visible;
-
   box.style.display = visible ? "block" : "none";
 }
 
