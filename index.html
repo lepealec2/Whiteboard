@@ -1,189 +1,353 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Simple Whiteboard</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #f5f5f5;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    #pageTitle {
-      text-align: center;
-      font-size: 36px;
-    }
+<style>
 
-    #toolbar {
-      padding: 10px;
-      background: white;
-      border-bottom: 1px solid #ccc;
-      font-size: 36px;
-    }
+body {
+  margin:0;
+  font-family:Arial;
+  background:#f5f5f5;
+  text-align:center;
+}
 
-    input, button {
-      margin: 3px;
-      font-size: 36px;
-    }
+#pageTitle {
+  font-size:36px;
+}
 
-    #nameBox {
-      width: 90%;
-      margin: 10px auto;
-      display: block;
-      font-size: 100px;
-      padding: 5px;
-      text-align: center;
-    }
+#toolbar {
+  padding:10px;
+  background:white;
+  border-bottom:1px solid #ccc;
+  font-size:36px;
+}
 
-    #nameBox::placeholder {
-      text-align: center;
-    }
+.row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:5px;
+}
 
-    #boardContainer {
-      width: 90%;
-      height: 70vh;
-      margin: 20px auto 5px auto;
-    }
+input, button {
+  margin:3px;
+  font-size:36px;
+}
 
-    #boardBox {
-      width: 100%;
-      height: 100%;
-      padding: 10px;
-      border: 2px solid #333;
-      outline: none;
-      overflow: auto;
-      background: white;
-      color: black;
-      font-size: 100px;
-      text-align: left;
-      box-sizing: border-box;
-    }
+#nameBox {
+  width:90%;
+  margin:10px auto;
+  display:block;
+  font-size:100px;
+  padding:5px;
+  text-align:center;
+  box-sizing:border-box;
+}
 
-    #bottomControls {
-      width: 90%;
-      margin: 10px auto;
-      text-align: right;
-    }
+#nameBox::placeholder {
+  text-align:center;
+}
 
-  </style>
+
+#boardContainer {
+  width:90%;
+  height:70vh;
+  margin:20px auto 5px auto;
+}
+
+
+#boardBox {
+  width:100%;
+  height:100%;
+  padding:10px;
+  border:2px solid #333;
+  outline:none;
+  overflow:auto;
+  background:white;
+  color:black;
+  font-size:100px;
+  text-align:left;
+  box-sizing:border-box;
+}
+
+
+#bottomControls {
+  width:90%;
+  margin:10px auto;
+}
+
+
+</style>
 
 </head>
 
 <body>
 
-<h1 id="pageTitle">Simple Whiteboard</h1>
+
+
 
 <input id="nameBox" placeholder="Name">
 
+
+
+<div class="row">
+
+<button onclick="toggleBox()">
+Hide/Show Board
+</button>
+
+<button onclick="toggleName()">
+Hide/Show Name
+</button>
+
+<button onclick="toggleSettings()">
+Hide/Show Settings
+</button>
+
+</div>
+
+
+
 <div id="toolbar">
 
-  Text Color:
-  <input type="color" id="textColor" value="#000000">
 
-  Box Color:
-  <input type="color" id="boxColor" value="#ffffff">
+<div class="row">
 
-  Text Size:
-  <button onclick="changeSize(-10)">-10</button>
-  <input type="number" id="fontSize" value="100" min="5" max="200">
-  <button onclick="changeSize(10)">+10</button>
-  px
+Text Color:
 
-  <br>
+<input 
+type="color" 
+id="textColor" 
+value="#000000">
 
-  <button onclick="resetFormats()">Reset Formats</button>
-  <button onclick="toggleCenter()">Center</button>
-  <button onclick="toggleBox()">Hide/Show</button>
+
+Box Color:
+
+<input 
+type="color" 
+id="boxColor" 
+value="#ffffff">
 
 </div>
+
+
+
+<div class="row">
+
+Text Size:
+
+<button onclick="changeSize(-10)">
+-10
+</button>
+
+
+<input 
+type="number"
+id="fontSize"
+value="100"
+min="5"
+max="200">
+
+
+<button onclick="changeSize(10)">
++10
+</button>
+
+px
+
+</div>
+
+
+
+<div class="row">
+
+<button onclick="resetFormats()">
+Reset Formats
+</button>
+
+<button onclick="toggleCenter()">
+Center
+</button>
+
+</div>
+
+
+
+</div>
+
+
 
 <div id="boardContainer">
-  <div id="boardBox" contenteditable="true"></div>
+
+<div id="boardBox" contenteditable="true"></div>
+
 </div>
 
+
+
 <div id="bottomControls">
-  <button onclick="clearText()">Clear Text</button>
+
+<button onclick="clearText()">
+Clear Text
+</button>
+
 </div>
+
+
 
 <script>
 
-let box = document.getElementById("boardBox");
-let nameBox = document.getElementById("nameBox");
 
-let visible = true;
-let centered = false;
+let box=document.getElementById("boardBox");
+let nameBox=document.getElementById("nameBox");
 
-// --------------------
-// TEXT SETTINGS
-// --------------------
+let visible=true;
+let centered=false;
 
-// Text color
-document.getElementById("textColor").addEventListener("input", function() {
-  box.style.color = this.value;
+
+
+document.getElementById("textColor")
+.addEventListener("input",function(){
+
+box.style.color=this.value;
+
 });
 
-// Background color
-document.getElementById("boxColor").addEventListener("input", function() {
-  box.style.background = this.value;
+
+
+document.getElementById("boxColor")
+.addEventListener("input",function(){
+
+box.style.background=this.value;
+
 });
 
-// Font size input
-document.getElementById("fontSize").addEventListener("input", function() {
-  box.style.fontSize = this.value + "px";
-  nameBox.style.fontSize = this.value + "px";
+
+
+document.getElementById("fontSize")
+.addEventListener("input",function(){
+
+box.style.fontSize=this.value+"px";
+
+nameBox.style.fontSize=this.value+"px";
+
 });
 
-// Change text size
-function changeSize(amount) {
-  let input = document.getElementById("fontSize");
-  let size = parseInt(input.value) + amount;
 
-  if (size < 5) size = 5;
-  if (size > 200) size = 200;
 
-  input.value = size;
+function changeSize(amount){
 
-  box.style.fontSize = size + "px";
-  nameBox.style.fontSize = size + "px";
+let input=document.getElementById("fontSize");
+
+let size=parseInt(input.value)+amount;
+
+
+if(size<5)
+size=5;
+
+if(size>200)
+size=200;
+
+
+input.value=size;
+
+
+box.style.fontSize=size+"px";
+
+nameBox.style.fontSize=size+"px";
+
 }
 
-// Center text
-function toggleCenter() {
-  centered = !centered;
-  box.style.textAlign = centered ? "center" : "left";
+
+
+function toggleCenter(){
+
+centered=!centered;
+
+box.style.textAlign =
+centered ? "center" : "left";
+
 }
 
-// Clear text
-function clearText() {
-  box.innerHTML = "";
+
+
+function clearText(){
+
+box.innerHTML="";
+
 }
 
-// Reset formats
-function resetFormats() {
-  document.getElementById("textColor").value = "#000000";
-  document.getElementById("boxColor").value = "#ffffff";
-  document.getElementById("fontSize").value = 100;
 
-  box.style.color = "#000000";
-  box.style.background = "#ffffff";
-  box.style.fontSize = "100px";
-  box.style.textAlign = "left";
 
-  nameBox.style.fontSize = "100px";
+function resetFormats(){
 
-  centered = false;
+document.getElementById("textColor").value="#000000";
+
+document.getElementById("boxColor").value="#ffffff";
+
+document.getElementById("fontSize").value=100;
+
+
+box.style.color="#000000";
+
+box.style.background="#ffffff";
+
+box.style.fontSize="100px";
+
+box.style.textAlign="left";
+
+
+nameBox.style.fontSize="100px";
+
+
+centered=false;
+
 }
 
-// Hide/show board
-function toggleBox() {
-  visible = !visible;
 
-  document.getElementById("boardContainer").style.display =
-    visible ? "block" : "none";
+
+function toggleBox(){
+
+visible=!visible;
+
+
+document.getElementById("boardContainer").style.display =
+visible ? "block" : "none";
+
 }
+
+
+
+function toggleName(){
+
+nameBox.style.display =
+nameBox.style.display==="none"
+? "block"
+: "none";
+
+}
+
+
+
+function toggleSettings(){
+
+let toolbar=document.getElementById("toolbar");
+
+
+toolbar.style.display =
+toolbar.style.display==="none"
+? "block"
+: "none";
+
+}
+
 
 </script>
+
 
 </body>
 </html>
