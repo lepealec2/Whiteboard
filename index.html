@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
 body {
   margin:0;
   font-family:Arial;
@@ -13,31 +12,7 @@ body {
   text-align:center;
 }
 
-#pageTitle {
-  font-size:36px;
-}
-
-#toolbar {
-  padding:10px;
-  background:white;
-  border-bottom:1px solid #ccc;
-  font-size:36px;
-}
-
-.row{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:5px;
-}
-
-input, button {
-  margin:3px;
-  font-size:36px;
-}
-
+/* NAME */
 #nameBox {
   width:90%;
   margin:10px auto;
@@ -48,15 +23,41 @@ input, button {
   box-sizing:border-box;
 }
 
-#nameBox::placeholder {
-  text-align:center;
+/* TOP BUTTONS */
+.row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin:5px 0;
+  flex-wrap:wrap;
+}
+
+/* TOOLBAR */
+#toolbar {
+  background:#ddd;
+  padding:10px;
+  font-size:18px;
+}
+
+/* BUTTONS */
+button {
+  font-size:18px;
+  padding:5px 10px;
+}
+
+/* INPUTS */
+input {
+  font-size:18px;
+  padding:5px;
 }
 
 
+/* BOARD */
 #boardContainer {
   width:90%;
   height:70vh;
-  margin:20px auto 5px auto;
+  margin:20px auto 80px auto;
 }
 
 
@@ -75,11 +76,31 @@ input, button {
 }
 
 
+/* BOTTOM BUTTON BAR */
 #bottomControls {
-  width:90%;
-  margin:10px auto;
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#ddd;
+  padding:10px;
+  border-top:2px solid #aaa;
 }
 
+
+#bottomControls .row {
+  display:flex;
+  justify-content:space-evenly;
+  align-items:center;
+  flex-wrap:nowrap;
+  gap:20px;
+}
+
+
+#bottomControls button {
+  flex:1;
+  max-width:220px;
+}
 
 </style>
 
