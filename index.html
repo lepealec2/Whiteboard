@@ -44,7 +44,6 @@
       width: 90%;
       height: 70vh;
       margin: 20px auto 5px auto;
-      position: relative;
     }
 
     #boardBox {
@@ -61,14 +60,6 @@
       box-sizing: border-box;
     }
 
-    #drawCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: none;
-      cursor: crosshair;
-    }
-
     #bottomControls {
       width: 90%;
       margin: 10px auto;
@@ -81,12 +72,9 @@
 
 <body>
 
-
 <h1 id="pageTitle">Simple Whiteboard</h1>
 
-
 <input id="nameBox" placeholder="Name">
-
 
 <div id="toolbar">
 
@@ -95,7 +83,6 @@
 
   Box Color:
   <input type="color" id="boxColor" value="#ffffff">
-
 
   Text Size:
   <button onclick="changeSize(-10)">-10</button>
@@ -107,34 +94,19 @@
 
   <button onclick="resetFormats()">Reset Formats</button>
   <button onclick="toggleCenter()">Center</button>
-  <button id="drawButton" onclick="toggleDraw()">Enable Drawing</button>
   <button onclick="toggleBox()">Hide/Show</button>
 
 </div>
 
-
-
 <div id="boardContainer">
-
   <div id="boardBox" contenteditable="true"></div>
-
-  <canvas id="drawCanvas"></canvas>
-
 </div>
-
-
 
 <div id="bottomControls">
-
   <button onclick="clearText()">Clear Text</button>
-  <button onclick="clearDraw()">Clear Draw</button>
-
 </div>
 
-
-
 <script>
-
 
 let box = document.getElementById("boardBox");
 let nameBox = document.getElementById("nameBox");
@@ -142,87 +114,56 @@ let nameBox = document.getElementById("nameBox");
 let visible = true;
 let centered = false;
 
-
 // --------------------
 // TEXT SETTINGS
 // --------------------
-
 
 // Text color
 document.getElementById("textColor").addEventListener("input", function() {
   box.style.color = this.value;
 });
 
-
 // Background color
 document.getElementById("boxColor").addEventListener("input", function() {
   box.style.background = this.value;
 });
 
-
 // Font size input
 document.getElementById("fontSize").addEventListener("input", function() {
-
   box.style.fontSize = this.value + "px";
   nameBox.style.fontSize = this.value + "px";
-
 });
-
 
 // Change text size
 function changeSize(amount) {
-
   let input = document.getElementById("fontSize");
-
   let size = parseInt(input.value) + amount;
 
-
-  if (size < 5) {
-    size = 5;
-  }
-
-
-  if (size > 200) {
-    size = 200;
-  }
-
+  if (size < 5) size = 5;
+  if (size > 200) size = 200;
 
   input.value = size;
 
   box.style.fontSize = size + "px";
   nameBox.style.fontSize = size + "px";
-
 }
-
-
 
 // Center text
 function toggleCenter() {
-
   centered = !centered;
-
   box.style.textAlign = centered ? "center" : "left";
-
 }
 
-
-
-// Clear text only
+// Clear text
 function clearText() {
-
   box.innerHTML = "";
-
 }
-
-
 
 // Reset formats
 function resetFormats() {
-
   document.getElementById("textColor").value = "#000000";
   document.getElementById("boxColor").value = "#ffffff";
   document.getElementById("fontSize").value = 100;
-
 
   box.style.color = "#000000";
   box.style.background = "#ffffff";
@@ -231,164 +172,18 @@ function resetFormats() {
 
   nameBox.style.fontSize = "100px";
 
-
   centered = false;
-
 }
-
-
 
 // Hide/show board
 function toggleBox() {
-
   visible = !visible;
 
   document.getElementById("boardContainer").style.display =
     visible ? "block" : "none";
-
 }
-
-
-
-// --------------------
-// DRAWING
-// --------------------
-
-
-let drawMode = false;
-
-let canvas = document.getElementById("drawCanvas");
-
-let ctx = canvas.getContext("2d");
-
-let drawing = false;
-
-
-
-function resizeCanvas() {
-
-  let oldCanvas = document.createElement("canvas");
-
-  let oldCtx = oldCanvas.getContext("2d");
-
-
-  oldCanvas.width = canvas.width;
-  oldCanvas.height = canvas.height;
-
-
-  oldCtx.drawImage(canvas, 0, 0);
-
-
-  canvas.width = box.clientWidth;
-  canvas.height = box.clientHeight;
-
-
-  ctx.drawImage(oldCanvas, 0, 0);
-
-}
-
-
-
-resizeCanvas();
-
-window.addEventListener("resize", resizeCanvas);
-
-
-
-// Enable/hide drawing
-function toggleDraw() {
-
-  drawMode = !drawMode;
-
-  let button = document.getElementById("drawButton");
-
-
-  if (drawMode) {
-
-    resizeCanvas();
-
-    canvas.style.display = "block";
-
-    box.contentEditable = false;
-
-    button.innerText = "Hide Drawing";
-
-
-  } else {
-
-    canvas.style.display = "none";
-
-    box.contentEditable = true;
-
-    button.innerText = "Enable Drawing";
-
-  }
-
-}
-
-
-
-// Start drawing
-canvas.addEventListener("mousedown", function(e) {
-
-  drawing = true;
-
-  ctx.beginPath();
-
-  ctx.moveTo(e.offsetX, e.offsetY);
-
-});
-
-
-
-// Draw
-canvas.addEventListener("mousemove", function(e) {
-
-  if (!drawing) return;
-
-
-  ctx.lineWidth = 5;
-
-  ctx.lineCap = "round";
-
-  ctx.strokeStyle =
-    document.getElementById("textColor").value;
-
-
-  ctx.lineTo(e.offsetX, e.offsetY);
-
-  ctx.stroke();
-
-});
-
-
-
-// Stop drawing
-canvas.addEventListener("mouseup", function() {
-
-  drawing = false;
-
-});
-
-
-canvas.addEventListener("mouseleave", function() {
-
-  drawing = false;
-
-});
-
-
-
-// Clear drawing only
-function clearDraw() {
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-}
-
 
 </script>
-
 
 </body>
 </html>
